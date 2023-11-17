@@ -3,7 +3,7 @@ plugins {
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
-    kotlin("plugin.serialization") version "1.8.21"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
 }
 
 kotlin {
@@ -23,7 +23,6 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 
     sourceSets {
