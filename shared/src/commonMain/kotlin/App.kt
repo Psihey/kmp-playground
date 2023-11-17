@@ -1,4 +1,5 @@
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
@@ -46,15 +51,53 @@ fun BirdAppTheme(
 
 @Composable
 fun App() {
-    BirdAppTheme {
-        val birdsViewModel = getViewModel(Unit, viewModelFactory { BirdsViewModel() })
-        BirdsPage(birdsViewModel)
-    }
+    Navigator(screen =
+        BirdsListScreen()
+    )
+
 }
+
+class BirdsListScreen : Screen{
+
+    @Composable
+    override fun Content() {
+        val birdsViewModel = getViewModel(Unit, viewModelFactory { BirdsViewModel() })
+        BirdAppTheme {
+
+            BirdsPage(birdsViewModel)
+        }
+    }
+
+}
+
+data class BirdScreen(val path : String) : Screen{
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+
+        BirdAppTheme {
+            Column(  Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                Text("Back", modifier = Modifier.clickable {navigator.pop()})
+                KamelImage(
+                    asyncPainterResource("https://sebastianaigner.github.io/demo-image-api/${path}"),
+                    path,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxWidth().aspectRatio(1.0f)
+                )
+            }
+        }
+    }
+
+}
+
 
 @Composable
 fun BirdsPage(viewModel: BirdsViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    val navigator = LocalNavigator.currentOrThrow
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,7 +132,7 @@ fun BirdsPage(viewModel: BirdsViewModel) {
                 modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp),
                 content = {
                     items(uiState.selectedImages) {
-                        BirdImageCell(it)
+                        BirdImageCell(it,navigator)
                     }
                 }
             )
@@ -98,12 +141,14 @@ fun BirdsPage(viewModel: BirdsViewModel) {
 }
 
 @Composable
-fun BirdImageCell(image: BirdImage) {
+fun BirdImageCell(image: BirdImage, navigator: Navigator) {
     KamelImage(
         asyncPainterResource("https://sebastianaigner.github.io/demo-image-api/${image.path}"),
         "${image.category} by ${image.author}",
         contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxWidth().aspectRatio(1.0f)
+        modifier = Modifier.fillMaxWidth().aspectRatio(1.0f).clickable {
+            navigator.plusAssign(BirdScreen(image.path))
+        }
     )
 }
 

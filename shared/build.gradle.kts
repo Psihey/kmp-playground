@@ -7,7 +7,7 @@ plugins {
 }
 
 kotlin {
-    android()
+    androidTarget()
 
     iosX64()
     iosArm64()
@@ -28,11 +28,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                val voyagerVersion = "1.0.0-rc10"
+                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
                 implementation("media.kamel:kamel-image:0.6.0")
                 implementation("io.ktor:ktor-client-core:2.3.1")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.1")
