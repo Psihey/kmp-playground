@@ -9,6 +9,7 @@ plugins {
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
     id("com.codingfeline.buildkonfig") version "+"
+    id ("dev.icerock.mobile.multiplatform-resources") version "0.23.0"
 }
 
 // Dependencies.kt
@@ -20,10 +21,12 @@ object Versions {
 buildscript {
     repositories {
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
         classpath("com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:latest_version")
+        classpath( "dev.icerock.moko:resources-generator:0.23.0")
     }
 }
 
@@ -54,6 +57,10 @@ kotlin {
                 // Koin integration
                 implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
                 implementation("io.insert-koin:koin-compose:1.1.0")
+
+                implementation("dev.icerock.moko:resources:0.23.0")
+                implementation("dev.icerock.moko:resources-compose:0.23.0") // for compose multiplatform
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
@@ -67,6 +74,7 @@ kotlin {
             }
         }
         val androidMain by getting {
+            dependsOn(commonMain)
             dependencies {
                 api("androidx.activity:activity-compose:1.6.1")
                 api("androidx.appcompat:appcompat:1.6.1")
@@ -111,6 +119,10 @@ android {
         jvmToolchain(11)
     }
 
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.myapplication.shared" // required
 }
 
 buildkonfig {
