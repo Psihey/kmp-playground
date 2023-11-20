@@ -1,9 +1,23 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
+    id("com.codingfeline.buildkonfig") version "+"
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
+        classpath("com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:latest_version")
+    }
 }
 
 kotlin {
@@ -65,6 +79,7 @@ kotlin {
             }
         }
     }
+
 }
 
 android {
@@ -86,4 +101,36 @@ android {
     kotlin {
         jvmToolchain(11)
     }
+
 }
+
+buildkonfig {
+    packageName = "com.myapplication"
+    defaultConfigs {
+        buildConfigField(FieldSpec.Type.STRING, "test", "testvalue")
+        buildConfigField(FieldSpec.Type.STRING, "target", "common")
+        buildConfigField(FieldSpec.Type.STRING, "testKey1", null, nullable = true)
+        buildConfigField(FieldSpec.Type.STRING, "testKey2", "testValue2", nullable = false)
+        buildConfigField(FieldSpec.Type.STRING, "testKey3", "testValue3", nullable = false, const = true)
+    }
+
+    targetConfigs {
+        create("android") {
+            buildConfigField(FieldSpec.Type.STRING, "target", "android")
+        }
+        create("ios") {
+            buildConfigField(FieldSpec.Type.STRING, "target", "ios")
+        }
+        // flavor is passed as a first argument of targetConfigs
+    }
+    targetConfigs("dev") {
+        create("ios") {
+            buildConfigField(FieldSpec.Type.STRING, "target", "devValueIos")
+        }
+        create("android"){
+            buildConfigField(FieldSpec.Type.STRING, "target", "devValueAndroid")
+        }
+    }
+}
+
+
