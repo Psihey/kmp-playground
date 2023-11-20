@@ -1,3 +1,5 @@
+package screen
+
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import io.ktor.client.HttpClient
