@@ -27,6 +27,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import co.touchlab.kermit.Logger
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
@@ -61,6 +62,7 @@ class BirdsListScreen : Screen{
 
     @Composable
     override fun Content() {
+        Logger.i("Open screen", tag = BirdsListScreen::class.simpleName.toString())
         val birdsViewModel = getViewModel(Unit, viewModelFactory { BirdsViewModel() })
         BirdAppTheme {
 
@@ -75,7 +77,7 @@ data class BirdScreen(val path : String) : Screen{
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-
+        Logger.i("Open screen", tag = BirdScreen::class.simpleName.toString())
         BirdAppTheme {
             Column(  Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,

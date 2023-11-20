@@ -44,6 +44,7 @@ kotlin {
             dependencies {
                 val voyagerVersion = "1.0.0-rc10"
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+                implementation("co.touchlab:kermit:2.0.2")
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
