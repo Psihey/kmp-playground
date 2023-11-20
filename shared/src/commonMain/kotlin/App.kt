@@ -5,8 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
+import di.appModule
+import org.koin.compose.KoinApplication
 import screen.BirdsListScreen
-
 @Composable
 fun BirdAppTheme(
     content: @Composable () -> Unit
@@ -25,10 +26,15 @@ fun BirdAppTheme(
 
 @Composable
 fun App() {
-    Navigator(
-        screen =
-        BirdsListScreen()
-    )
+    KoinApplication(application = {
+        modules(appModule())
+    }) {
+        Navigator(
+            screen =
+            BirdsListScreen()
+        )
+    }
+
 }
 
 

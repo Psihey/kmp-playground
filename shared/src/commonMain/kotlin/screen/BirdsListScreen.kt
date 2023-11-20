@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -37,7 +38,7 @@ class BirdsListScreen : Screen {
     @Composable
     override fun Content() {
         Logger.i("Open screen", tag = BirdsListScreen::class.simpleName.toString())
-        val birdsViewModel = rememberScreenModel{ BirdsViewModel() }
+        val birdsViewModel = getScreenModel <BirdsViewModel>()
         BirdAppTheme {
             BirdsPage(birdsViewModel)
         }

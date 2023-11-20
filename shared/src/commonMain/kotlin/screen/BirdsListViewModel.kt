@@ -21,15 +21,9 @@ data class BirdsUiState(
     val selectedImages = images.filter { it.category == selectedCategory }
 }
 
-class BirdsViewModel : ScreenModel {
-    private val _uiState = MutableStateFlow<BirdsUiState>(BirdsUiState())
+class BirdsViewModel(private val httpClient: HttpClient) : ScreenModel {
+    private val _uiState = MutableStateFlow(BirdsUiState())
     val uiState = _uiState.asStateFlow()
-
-    private val httpClient = HttpClient {
-        install(ContentNegotiation) {
-            json()
-        }
-    }
 
     init {
         updateImages()
@@ -45,7 +39,7 @@ class BirdsViewModel : ScreenModel {
         }
     }
 
-    fun updateImages() {
+    private fun updateImages() {
         screenModelScope.launch {
             val images = getImages()
             _uiState.update {

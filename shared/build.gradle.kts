@@ -1,3 +1,4 @@
+import Build_gradle.Versions.koin
 import com.codingfeline.buildkonfig.compiler.FieldSpec
 
 
@@ -8,6 +9,12 @@ plugins {
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
     id("com.codingfeline.buildkonfig") version "+"
+}
+
+// Dependencies.kt
+
+object Versions {
+    const val koin = "1.1.0"
 }
 
 buildscript {
@@ -44,10 +51,13 @@ kotlin {
             dependencies {
                 val voyagerVersion = "1.0.0-rc10"
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-                implementation("co.touchlab:kermit:2.0.2")
+                // Koin integration
+                implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
+                implementation("io.insert-koin:koin-compose:1.1.0")
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
+                implementation("co.touchlab:kermit:2.0.2")
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation("media.kamel:kamel-image:0.6.0")
                 implementation("io.ktor:ktor-client-core:2.3.1")
