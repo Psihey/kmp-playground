@@ -23,13 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import co.touchlab.kermit.Logger
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import model.BirdImage
@@ -63,9 +62,8 @@ class BirdsListScreen : Screen{
     @Composable
     override fun Content() {
         Logger.i("Open screen", tag = BirdsListScreen::class.simpleName.toString())
-        val birdsViewModel = getViewModel(Unit, viewModelFactory { BirdsViewModel() })
+        val birdsViewModel = rememberScreenModel{BirdsViewModel() }
         BirdAppTheme {
-
             BirdsPage(birdsViewModel)
         }
     }

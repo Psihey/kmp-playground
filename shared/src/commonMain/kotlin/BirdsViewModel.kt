@@ -1,4 +1,5 @@
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -18,7 +19,7 @@ data class BirdsUiState(
     val selectedImages = images.filter { it.category == selectedCategory }
 }
 
-class BirdsViewModel : ViewModel() {
+class BirdsViewModel : ScreenModel {
     private val _uiState = MutableStateFlow<BirdsUiState>(BirdsUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -32,7 +33,7 @@ class BirdsViewModel : ViewModel() {
         updateImages()
     }
 
-    override fun onCleared() {
+    override fun onDispose() {
         httpClient.close()
     }
 
@@ -43,7 +44,7 @@ class BirdsViewModel : ViewModel() {
     }
 
     fun updateImages() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             val images = getImages()
             _uiState.update {
                 it.copy(images = images)
