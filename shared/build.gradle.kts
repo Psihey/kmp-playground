@@ -1,4 +1,4 @@
-import Build_gradle.Versions.koin
+
 import com.codingfeline.buildkonfig.compiler.FieldSpec
 
 
@@ -64,6 +64,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
+
                 implementation("co.touchlab:kermit:2.0.2")
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation("media.kamel:kamel-image:0.6.0")
@@ -122,7 +123,7 @@ android {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "com.myapplication.shared" // required
+    multiplatformResourcesPackage = "com.myapplication"
 }
 
 buildkonfig {

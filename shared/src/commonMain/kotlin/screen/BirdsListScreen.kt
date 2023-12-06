@@ -30,6 +30,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import co.touchlab.kermit.Logger
+import com.myapplication.MR
+import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import model.BirdImage
@@ -49,12 +51,13 @@ class BirdsListScreen : Screen {
 fun BirdsPage(viewModel: BirdsViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val navigator = LocalNavigator.currentOrThrow
+    val name  = stringResource( MR.strings.app_name)
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
+        Text(text = name)
         Row(
             Modifier.fillMaxWidth().padding(5.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp)
