@@ -2,6 +2,7 @@ package screen
 
 import BirdAppTheme
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,9 +11,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -21,9 +25,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.rememberScreenModel
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -31,6 +36,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import co.touchlab.kermit.Logger
 import com.myapplication.MR
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -42,22 +48,30 @@ class BirdsListScreen : Screen {
         Logger.i("Open screen", tag = BirdsListScreen::class.simpleName.toString())
         val birdsViewModel = getScreenModel <BirdsViewModel>()
         BirdAppTheme {
-            BirdsPage(birdsViewModel)
+            BirdsListScreen(birdsViewModel)
         }
     }
 }
 
 @Composable
-fun BirdsPage(viewModel: BirdsViewModel) {
+fun BirdsListScreen(viewModel: BirdsViewModel) {
     val uiState by viewModel.uiState.collectAsState()
     val navigator = LocalNavigator.currentOrThrow
-    val name  = stringResource( MR.strings.app_name)
+
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
-        Text(text = name)
+        AnimatedVisibility(uiState.selectedImages.isEmpty()){
+            Column(
+                Modifier.wrapContentSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(painter = painterResource(MR.images.bird_logo),contentDescription = null)
+                Text(modifier = Modifier.padding(6.dp),text = stringResource(MR.strings.app_name), fontSize = 20.sp, color = Color.Black)
+            }
+        }
         Row(
             Modifier.fillMaxWidth().padding(5.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -101,7 +115,7 @@ fun BirdImageCell(image: BirdImage, navigator: Navigator) {
         "${image.category} by ${image.author}",
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxWidth().aspectRatio(1.0f).clickable {
-            navigator.plusAssign(BirdScreen(image.path))
+            navigator.plusAssign(BirdDetailsScreen(image.path))
         }
     )
 }
